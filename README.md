@@ -1,2 +1,3 @@
-# food_safty_system
-食品安全追溯系统
+# food_safty_system （食品安全追溯系统）
+
+完成全部功能设计，包括客户端、小程序端、服务端。
