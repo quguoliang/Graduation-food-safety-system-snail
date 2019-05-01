@@ -1,0 +1,26 @@
+{
+  "name": "koa-framework",
+  "version": "1.0.0",
+  "description": "封装koa框架，主要用于后端处理数据",
+  "main": "server.js",
+  "author": "snail",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "koa": "^2.7.0",
+    "koa-body": "^4.0.7",
+    "koa-bodyparser": "^4.2.1",
+    "koa-multer": "^1.0.2",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6",
+    "mocha": "^6.1.4",
+    "monk": "^6.0.6",
+    "request": "^2.88.0",
+    "should": "^13.2.3"
+  }
+}
