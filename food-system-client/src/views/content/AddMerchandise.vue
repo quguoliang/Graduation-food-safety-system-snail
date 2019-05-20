@@ -11,6 +11,9 @@
 					<FormItem label="生产厂家">
 						<Input v-model="formItem.factory" placeholder="请输入厂家名称"></Input>
 					</FormItem>
+					<FormItem label="客服电话">
+						<Input v-model="formItem.telphone" placeholder="请输入客服电话"></Input>
+					</FormItem>
 					<FormItem label="商品类别">
 						<Select v-model="formItem.type">
 							<Option value="酒水类">酒水类</Option>
@@ -77,6 +80,7 @@ export default {
 				goodsname: '',
 				type: '',
 				price: 0,
+				telphone: '',
 				factory: '',
 				date: '',
 				time: '',

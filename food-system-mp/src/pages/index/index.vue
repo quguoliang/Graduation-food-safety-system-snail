@@ -100,7 +100,7 @@ export default {
   onLoad() {
     var _this = this;
     uni.request({
-      url: "http://47.107.150.235:2345/api/allartical", //仅为示例，并非真实接口地址。
+      url: "http://47.107.150.235:2346/api/allartical", //仅为示例，并非真实接口地址。
       success: res => {
         this.articalList = res.data.data[0];
       }
@@ -139,14 +139,14 @@ export default {
     searchArtical() {
       if (this.searchInfo === "") {
         uni.request({
-          url: "http://47.107.150.235:2345/api/allartical", //仅为示例，并非真实接口地址。
+          url: "http://47.107.150.235:2346/api/allartical", //仅为示例，并非真实接口地址。
           success: res => {
             this.articalList = res.data.data[0];
           }
         });
       } else {
         uni.request({
-          url: "http://47.107.150.235:2345/api/searcharticalmp",
+          url: "http://47.107.150.235:2346/api/searcharticalmp",
           data: {
             tag: this.searchInfo
           },

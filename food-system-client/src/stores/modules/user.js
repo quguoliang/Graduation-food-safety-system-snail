@@ -4,13 +4,13 @@ import iview from 'iview';
 const user = {
 	state: {
 		_id: '',
-		telphone: '18531452110',
+		telphone: '',
 		username: '',
 		isSuperManager: '',
 		avatar: '/uploads/primary.jpg',
 		validateCode: '',
 		remark: '',
-		localhost: 'http://127.0.0.1:2345',
+		localhost: 'http://47.107.150.235:2346',
 	},
 
 	mutations: {
@@ -58,7 +58,7 @@ const user = {
 			const obj = await apiUser.register(userInfo);
 			if (obj.data.length !== 0) {
 				iview.Message.success('注册成功！即将跳转到首页');
-				commit('SET_USERNAME', obj.data[0].username);
+				commit('SET_USERNAME', obj.data[0]);
 				setTimeout(() => {
 					router.replace({
 						name: 'systemhome',

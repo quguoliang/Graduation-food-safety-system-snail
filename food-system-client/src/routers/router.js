@@ -17,9 +17,6 @@ const router = new Router({
 			path: '*',
 			name: 'error',
 			component: () => import('views/404.vue'),
-			// meta: {
-			// 	requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-			// },
 		},
 		{
 			path: '/',

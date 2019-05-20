@@ -1,19 +1,21 @@
 <template>
-	<div class="down-part">
-		<Card class="bottom-card">
-			<div style="text-align:center">
-				<ve-pie :loading="articalLoading" :data="articalChartData"></ve-pie>
-				<span>文章聚合信息展示</span>
-			</div>
-		</Card>
+  <div class="down-part">
+    <Card class="bottom-card">
+      <div style="text-align:center">
+        <ve-pie :loading="articalLoading"
+                :data="articalChartData"></ve-pie>
+        <span>文章聚合信息展示</span>
+      </div>
+    </Card>
 
-		<Card class="bottom-card">
-			<div style="text-align:center">
-				<ve-line :width="'470px'" :height="'400px'" :data="goodsChartData"></ve-line>
-				<span>商品聚合信息展示</span>
-			</div>
-		</Card>
-	</div>
+    <Card class="bottom-card">
+      <div style="text-align:center">
+        <ve-line :loading="goodsLoading"
+                 :data="goodsChartData"></ve-line>
+        <span>商品聚合信息展示</span>
+      </div>
+    </Card>
+  </div>
 </template>
 <script>
 import apiArtical from '@/provider/api/artical';

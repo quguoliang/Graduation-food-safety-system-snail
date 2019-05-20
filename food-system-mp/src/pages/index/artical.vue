@@ -2,8 +2,7 @@
   <div>
     <cu-custom bgColor="bg-gradual-blue"
                :isBack="true">
-      <block slot="backText"
-             @click="reback">返回</block>
+      <block slot="backText">返回</block>
 
       <block slot="content">文章详情</block>
     </cu-custom>
@@ -26,6 +25,7 @@
 <script>
 import marked from "marked";
 import uParse from "../../u-parse/u-parse.vue";
+import { setTimeout } from "timers";
 export default {
   name: "",
   components: { uParse },
@@ -39,26 +39,20 @@ export default {
   onLoad: function(option) {
     var _this = this;
     uni.request({
-      url: "http://47.107.150.235:2345/api/getarticalinfo",
+      url: "http://47.107.150.235:2346/api/getarticalinfo",
       data: {
         _id: option._id
       },
       success: res => {
-        this.title = marked(res.data.data[0].title.toString());
-
-        this.content = marked(res.data.data[0].content.toString());
+        let tit = res.data.data[0].title.toString();
+        let con = res.data.data[0].content.toString();
+        this.title = marked(tit);
+        this.content = marked(con);
         this.date = new Date(res.data.data[0].date).toLocaleString();
       }
     });
   },
   methods: {
-    reback() {
-      uni.navigateBack({
-        delta: 1,
-        animationType: "pop-out",
-        animationDuration: 200
-      });
-    },
     preview(src, e) {
       // do something
     },

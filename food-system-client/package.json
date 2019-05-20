@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "build": "vue-cli-service build",
-    "publish": "node ./publish.js",
-    "test": "vue-cli-service serve --project-mode test",
+    "publish": "vue-cli-service build --project-mode pro && node ./publish.js",
+    "test": "jest",
     "lint": "vue-cli-service lint",
     "build:dev": "vue-cli-service build --project-mode dev",
     "build:pre": "vue-cli-service build --project-mode pre",
@@ -15,17 +15,31 @@
     "pre": "vue-cli-service serve --project-mode pre",
     "pro": "vue-cli-service serve --project-mode pro"
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      " ^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    }
+  },
   "dependencies": {
     "@mapbox/mapbox-gl-directions": "^4.0.0",
     "@mapbox/mapbox-gl-geocoder": "^3.1.6",
     "@mapbox/mapbox-gl-language": "^0.10.0",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.18.0",
+    "babel-jest": "^24.7.1",
     "babel-plugin-import": "^1.11.0",
     "echarts": "^4.2.1",
     "hey-utils": "^0.4.0",
     "iview": "^3.3.0",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
+    "jsdom": "^15.0.0",
+    "jsdom-global": "^3.0.2",
     "mapbox-gl": "^0.53.1",
     "mavon-editor": "^2.6.17",
     "nprogress": "^0.2.0",
@@ -36,6 +50,7 @@
     "svg-baker-runtime": "^1.4.0",
     "v-charts": "^1.19.0",
     "vue": "^2.5.21",
+    "vue-jest": "^3.0.4",
     "vue-qriously": "^1.1.1",
     "vue-router": "^3.0.1",
     "vue-test-utils": "^1.0.0-beta.11",
@@ -49,6 +64,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
+    "jest": "^24.7.1",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "svg-sprite-loader": "^4.1.3",

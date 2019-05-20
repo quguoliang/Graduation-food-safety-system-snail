@@ -13,7 +13,7 @@ client.scp(
 		host: '47.107.150.235',
 		username: 'root',
 		password: 'ZZwo913845.',
-		path: '/root',
+		path: '/dist',
 	},
 	function(err) {
 		if (err) {

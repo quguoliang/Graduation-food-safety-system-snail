@@ -1,84 +1,111 @@
 <template>
-	<div class="system-title">
-		<div class="title-left">
-			<img class="img" src="../../assets/images/logo-white.png" alt="" />
-			<span>食品安全追溯系统</span>
-		</div>
-		<div class="title-avatar">
-			<!-- <svg-icon iconName="setUp"></svg-icon> -->
-			<Avatar :src="localhost + avatar" />
-			<span class="username" @click="handleInfo">
-				{{ username }}
-				<Icon type="md-arrow-dropdown" :class="rotateInfo" />
-			</span>
-		</div>
-		<transition name="fade">
-			<div v-show="dropFlag" class="drop-down">
-				<div class="drop-item" @click="userInfo">个人信息</div>
-				<div class="drop-item" @click="exit">退出系统</div>
-			</div>
-		</transition>
-		<Drawer title="个人信息" width="512" :closable="false" v-model="drawerInfo">
-			<div class="info-avatar">
-				<img @click="modifyUserInfo" class="user-avatar" :src="localhost + avatar" />
-			</div>
-			<div class="user-username">{{ username === '' ? '暂无' : username }}</div>
-			<div class="user-type">{{ isSuperManager === '1' ? '超级管理员' : '管理员' }}</div>
-			<div class="user-remark">{{ remark }}</div>
-		</Drawer>
-		<Drawer title="修改个人信息" :closable="false" v-model="drawerModify" width="300">
-			<div class="demo-upload-list" v-for="(item, index) in uploadList" :key="index">
-				<template v-if="item.status === 'finished'">
-					<img style="margin:0 auto" :src="item.url" />
-					<!-- <div class="demo-upload-list-cover">
+  <div class="system-title">
+    <div class="title-left">
+      <img class="img"
+           src="../../assets/images/logo-white.png"
+           alt="" />
+      <span>食品安全追溯系统</span>
+    </div>
+    <div class="title-avatar">
+      <!-- <svg-icon iconName="setUp"></svg-icon> -->
+      <Avatar :src="localhost + avatar" />
+      <span class="username"
+            @click="handleInfo">
+        {{ username }}
+        <Icon type="md-arrow-dropdown"
+              :class="rotateInfo" />
+      </span>
+    </div>
+    <transition name="fade">
+      <div v-show="dropFlag"
+           class="drop-down">
+        <div class="drop-item"
+             @click="userInfo">个人信息</div>
+        <div class="drop-item"
+             @click="exit">退出系统</div>
+      </div>
+    </transition>
+    <Drawer title="个人信息"
+            width="512"
+            :closable="false"
+            v-model="drawerInfo">
+      <div class="info-avatar">
+        <img @click="modifyUserInfo"
+             class="user-avatar"
+             :src="localhost + avatar" />
+      </div>
+      <div class="user-username">{{ username === '' ? '暂无' : username }}</div>
+      <div class="user-type">{{ isSuperManager === '1' ? '超级管理员' : '管理员' }}</div>
+      <div class="user-remark">{{ remark }}</div>
+    </Drawer>
+    <Drawer title="修改个人信息"
+            :closable="false"
+            v-model="drawerModify"
+            width="300">
+      <div class="demo-upload-list"
+           v-for="(item, index) in uploadList"
+           :key="index">
+        <template v-if="item.status === 'finished'">
+          <img style="margin:0 auto"
+               :src="item.url" />
+          <!-- <div class="demo-upload-list-cover">
 						<Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
 						<Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
 					</div> -->
-				</template>
-				<template v-else>
-					<Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-				</template>
-			</div>
-			<Upload
-				class="upload-avatar"
-				v-if="uploadFlag"
-				ref="upload"
-				:show-upload-list="false"
-				:default-file-list="defaultList"
-				:on-success="handleSuccess"
-				:format="['jpg', 'jpeg', 'png']"
-				:max-size="2048"
-				:on-format-error="handleFormatError"
-				:on-exceeded-size="handleMaxSize"
-				:before-upload="handleBeforeUpload"
-				multiple
-				type="drag"
-				action="/api/upload"
-				style="display: inline-block;width:58px;"
-			>
-				<div style="width: 58px;height:58px;line-height: 58px;">
-					<Icon type="ios-camera" size="20"></Icon>
-				</div>
-			</Upload>
-			<Form :model="formInfo" :label-width="60">
-				<FormItem label="系统账户">
-					<Input disabled v-model="formInfo.telphone"></Input>
-				</FormItem>
-				<FormItem label="用户名">
-					<Input v-model="formInfo.username" placeholder="请输入你的用户名..."></Input>
-				</FormItem>
-				<FormItem label="新密码">
-					<Input v-model="formInfo.password" placeholder="请输入你的新密码..."></Input>
-				</FormItem>
-				<FormItem label="个性签名">
-					<Input type="textarea" v-model="formInfo.remark" placeholder="请输入你的个性信息..."></Input>
-				</FormItem>
-				<FormItem>
-					<Button style="margin-left:50px" type="success" @click="confirmModify">确认修改</Button>
-				</FormItem>
-			</Form>
-		</Drawer>
-	</div>
+        </template>
+        <template v-else>
+          <Progress v-if="item.showProgress"
+                    :percent="item.percentage"
+                    hide-info></Progress>
+        </template>
+      </div>
+      <Upload class="upload-avatar"
+              v-if="uploadFlag"
+              ref="upload"
+              :show-upload-list="false"
+              :default-file-list="defaultList"
+              :on-success="handleSuccess"
+              :format="['jpg', 'jpeg', 'png']"
+              :max-size="2048"
+              :on-format-error="handleFormatError"
+              :on-exceeded-size="handleMaxSize"
+              :before-upload="handleBeforeUpload"
+              multiple
+              type="drag"
+              action="/api/upload"
+              style="display: inline-block;width:58px;">
+        <div style="width: 58px;height:58px;line-height: 58px;">
+          <Icon type="ios-camera"
+                size="20"></Icon>
+        </div>
+      </Upload>
+      <Form :model="formInfo"
+            :label-width="60">
+        <FormItem label="系统账户">
+          <Input disabled
+                 v-model="formInfo.telphone"></Input>
+        </FormItem>
+        <FormItem label="用户名">
+          <Input v-model="formInfo.username"
+                 placeholder="请输入你的用户名..."></Input>
+        </FormItem>
+        <FormItem label="新密码">
+          <Input v-model="formInfo.password"
+                 placeholder="请输入你的新密码..."></Input>
+        </FormItem>
+        <FormItem label="个性签名">
+          <Input type="textarea"
+                 v-model="formInfo.remark"
+                 placeholder="请输入你的个性信息..."></Input>
+        </FormItem>
+        <FormItem>
+          <Button style="margin-left:50px"
+                  type="success"
+                  @click="confirmModify">确认修改</Button>
+        </FormItem>
+      </Form>
+    </Drawer>
+  </div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -155,8 +182,6 @@ export default {
 			this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
 		},
 		handleSuccess(res, file) {
-			// this.defaultList.push({ name: file.name, url: 'http://localhost:2345' + res.filePath });
-
 			file.url = this.localhost + res.filePath;
 			this.formInfo.avatar = res.filePath;
 			this.uploadFlag = false;

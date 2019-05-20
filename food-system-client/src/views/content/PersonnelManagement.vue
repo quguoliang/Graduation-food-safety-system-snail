@@ -1,41 +1,69 @@
 <template>
-	<div class="personnel">
-		<div class="personnel-title">
-			<span>人员管理</span>
-			<Input class="title-input" search enter-button v-model="searchValue" placeholder="请输入名称..." @on-search="getSearchInfo" />
-		</div>
+  <div class="personnel">
+    <div class="personnel-title">
+      <span>人员管理</span>
+      <Input class="title-input"
+             search
+             enter-button
+             v-model="searchValue"
+             placeholder="请输入名称..."
+             @on-search="getSearchInfo" />
+    </div>
 
-		<Table :loading="loading" stripe height="580" :columns="columns1" :data="showList">
-			<template slot-scope="{ row }" slot="name">
-				<strong>{{ row.name }}</strong>
-			</template>
-			<template slot-scope="{ row, index }" slot="action">
-				<Button type="primary" size="small" style="margin-right: 5px" @click="modifyUserInfo(index)">修改</Button>
-				<Button type="error" size="small" @click="userRemove(index)">删除</Button>
-			</template>
-		</Table>
-		<Modal v-model="modal" title="用户信息修改" @on-ok="confirmModify">
-			<Form :model="formItem" :label-width="80">
-				<FormItem label="账户">
-					<Input disabled v-model="formItem.telphone" placeholder=""></Input>
-				</FormItem>
-				<FormItem label="用户名">
-					<Input v-model="formItem.username" placeholder=""></Input>
-				</FormItem>
-				<FormItem label="账户权限">
-					<Select v-model="formItem.isSuperManager">
-						<Option value="0">管理员</Option>
-						<Option value="1">超级管理员</Option>
-					</Select>
-				</FormItem>
-				<FormItem label="备注">
-					<Input type="textarea" v-model="formItem.remark" placeholder=""></Input>
-				</FormItem>
-			</Form>
-		</Modal>
+    <Table :loading="loading"
+           stripe
+           height="580"
+           :columns="columns1"
+           :data="showList">
+      <template slot-scope="{ row }"
+                slot="jurisdiction">
+        <span :class="row.jurisdiction==='超级管理员'?styleType:''">{{ row.jurisdiction}}</span>
 
-		<Page class="page" :page-size="pageSize" :total="total" @on-change="handlePageChange" />
-	</div>
+      </template>
+      <template slot-scope="{ row, index }"
+                slot="action">
+        <Button type="primary"
+                size="small"
+                style="margin-right: 5px"
+                @click="modifyUserInfo(index)">修改</Button>
+        <Button type="error"
+                size="small"
+                @click="userRemove(index)">删除</Button>
+      </template>
+    </Table>
+    <Modal v-model="modal"
+           title="用户信息修改"
+           @on-ok="confirmModify">
+      <Form :model="formItem"
+            :label-width="80">
+        <FormItem label="账户">
+          <Input disabled
+                 v-model="formItem.telphone"
+                 placeholder="" />
+        </FormItem>
+        <FormItem label="用户名">
+          <Input v-model="formItem.username"
+                 placeholder="" />
+        </FormItem>
+        <FormItem label="账户权限">
+          <Select v-model="formItem.isSuperManager">
+            <Option value="0">管理员</Option>
+            <Option value="1">超级管理员</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="备注">
+          <Input type="textarea"
+                 v-model="formItem.remark"
+                 placeholder="" />
+        </FormItem>
+      </Form>
+    </Modal>
+
+    <Page class="page"
+          :page-size="pageSize"
+          :total="total"
+          @on-change="handlePageChange" />
+  </div>
 </template>
 <script>
 import apiUser from '@/provider/api/user';
@@ -70,7 +98,7 @@ export default {
 				},
 				{
 					title: '权限类别',
-					key: 'jurisdiction',
+					slot: 'jurisdiction',
 					align: 'center',
 					sortable: true,
 				},
@@ -98,6 +126,11 @@ export default {
 			modal: false,
 		};
 	},
+	computed: {
+		styleType() {
+			return 'red';
+		},
+	},
 	mounted() {
 		this.getUserList();
 
@@ -105,6 +138,7 @@ export default {
 			this.handlePageChange(1);
 		}, 10);
 	},
+
 	methods: {
 		modifyUserInfo(index) {
 			this.modal = true;
@@ -144,8 +178,8 @@ export default {
 		async getUserList() {
 			let list = await apiUser.allUser();
 			this.total = list.data[0].length;
-			this.showList = this.transform(list.data[0].slice((this.current - 1) * this.pageSize, this.current * this.pageSize));
-			this.userList = this.transform(list.data[0]);
+			this.showList = this.transform(list.data[0].reverse().slice((this.current - 1) * this.pageSize, this.current * this.pageSize));
+			this.userList = this.transform(list.data[0].reverse());
 			this.loading = false;
 		},
 		handlePageChange(index) {
@@ -217,6 +251,9 @@ export default {
 .page {
 	text-align: right;
 	margin: 10px 0 5px 0;
+}
+.red {
+	color: rgb(150, 70, 70);
 }
 </style>
 <style lang="scss">

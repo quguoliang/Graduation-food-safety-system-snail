@@ -41,7 +41,7 @@ const artical = {
 	actions: {
 		GET_ARTICALLIST: async ({ commit }) => {
 			let list = await apiArtical.allArticalList();
-			commit('GET_ARTICALLIST', list.data[0]);
+			commit('GET_ARTICALLIST', list.data[0].reverse());
 		},
 		MODIFY_ARTICAL_SHOWLIST: ({ commit }, index) => {
 			commit('MODIFY_ARTICAL_SHOWLIST', index);

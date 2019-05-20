@@ -62,6 +62,9 @@ export default {
 			}
 		}
 	},
+	beforeDestroy() {
+		this.SET_ARTICALID('');
+	},
 	methods: {
 		...mapActions(['ADD_ARTICAL', 'SET_ARTICALID', 'MODIFY_ARTICAL', 'GET_ARTICALLIST']),
 		async confirmPublish() {

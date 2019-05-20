@@ -15,10 +15,12 @@
                :longitude="longitude"
                :markers="placeList"
                :polyline="linePoint"
+               :include-points='placeList'
                @markertap="getNodeInfo"
                @tap="goodsInfo">
-            <cover-view class="bg-img bg-mask flex align-center"
-                        style="background-image: url('http://47.107.150.235:2345/uploads/login-bg.jpeg');height: 414upx;">
+            <cover-view v-if="!controlsMarkerNode"
+                        class="bg-img bg-mask flex align-center"
+                        style="background-image: url('../../static/image/login-bg.jpeg');height: 414upx;">
               <cover-view class="padding-xl info"
                           style="font-size:14px">
                 <cover-view class="goods-item padding-xs text-l text-bold ">商品名称：{{goods.goodsname}}</cover-view>
@@ -26,17 +28,21 @@
                 <cover-view class="goods-item padding-xs text-l text-bold">商品类型：{{goods.type}}</cover-view>
                 <cover-view class="goods-item padding-xs text-l text-bold">商品厂家：{{goods.factory}}</cover-view>
                 <cover-view class="goods-item padding-xs text-l text-bold">商品简介：{{goods.remark}}</cover-view>
+                <cover-view class="goods-item padding-xs text-l text-bold">客服电话：{{goods.telphone}}</cover-view>
               </cover-view>
             </cover-view>
             <cover-view v-if="controlsMarkerNode"
-                        class="show-info">
+                        class="show-info"
+                        @click='changeNodeInfo'>
               <cover-view class="node-title">商品运输节点信息</cover-view>
               <cover-image class="img-node"
-                           :src="item.img"></cover-image>
-              <cover-view style="text-align:center">节点名称：{{showPlace.label}}</cover-view>
-              <cover-view style="text-align:center">节点简介：{{showPlace.remark}}</cover-view>
+                           :src='showPlace.img'></cover-image>
+
+              <cover-view class="pla-info">节点名称：{{showPlace.label}}</cover-view>
+              <cover-view class="pla-info">节点简介：{{showPlace.remark}}</cover-view>
 
             </cover-view>
+
           </map>
 
         </view>
@@ -51,7 +57,6 @@ export default {
   components: {},
   data() {
     return {
-      title: "map",
       latitude: 39.909,
       longitude: 116.39742,
       controlsMarkerNode: false,
@@ -59,14 +64,16 @@ export default {
       placeList: [],
       showPlace: {},
       covers: [],
+
       polyline: { color: "#cccccc" }
     };
   },
   onLoad: function(option) {
     uni.request({
-      url: "http://47.107.150.235:2345/api/selectgoodsinfo",
+      url: "http://47.107.150.235:2346/api/selectgoodsinfo",
       data: {
         _id: option._id
+        // _id: "5cd56f70089f971aa9229b50"
       },
       success: res => {
         this.goods = res.data.data[0];
@@ -80,7 +87,7 @@ export default {
           obj.label = item.placename;
           obj.remark = item.placeinfo;
           obj.iconPath = "../../static/image/marker@3px.png";
-          obj.img = "http://47.107.150.235:2345" + item.img;
+          obj.img = "http://47.107.150.235:2346" + item.img;
           return obj;
         });
         this.polyline.points = res.data.data[0].place.map((item, index) => {
@@ -102,7 +109,10 @@ export default {
       this.controlsMarkerNode = !this.controlsMarkerNode;
       this.showPlace = this.placeList[e.markerId];
     },
-    goodsInfo() {}
+    goodsInfo() {},
+    changeNodeInfo() {
+      this.controlsMarkerNode = !this.controlsMarkerNode;
+    }
   }
 };
 </script>
@@ -112,28 +122,38 @@ export default {
   margin-bottom: 10px;
 }
 .show-info {
-  width: 60%;
-  height: 300px;
-  background-color: #fff;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(160, 158, 158, 0.5);
   margin: 0 auto;
-  margin-top: 10px;
   box-shadow: 0px 0px 10px rgb(173, 172, 172);
 }
 .node-title {
-  padding: 5px 10px 5px 10px;
+  margin-top: 10px;
+  padding: 0px 10px 5px 10px;
   text-align: center;
-  font-size: 16px;
-  height: 15px;
-  line-height: 15px;
-  border-bottom: 1px solid rgb(199, 198, 198);
-  border-radius: 5px;
+  font-size: 18px;
+  height: 18px;
+  line-height: 18px;
+  font-weight: 600;
+  /* border-bottom: 1px solid rgb(199, 198, 198);
+  border-radius: 5px; */
 }
 .info {
   color: #fff;
 }
 .img-node {
-  width: 90%;
-  height: 200px;
+  width: 95%;
+  height: 300px;
   margin: 0 auto;
+}
+.pla-info {
+  font-size: 17px;
+  width: 95%;
+  font-weight: 400;
+  padding: 10px 10px;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-line;
 }
 </style>

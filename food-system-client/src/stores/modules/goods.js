@@ -35,7 +35,7 @@ const user = {
 	actions: {
 		GET_GOODSLIST: async ({ commit }, status) => {
 			let list = await apiGoods.selectGoodsList();
-			commit('GET_GOODSLIST', list.data[0]);
+			commit('GET_GOODSLIST', list.data[0].reverse());
 		},
 		GET_GOODS_CURRENT: ({ commit }, status) => {
 			commit('GET_GOODS_CURRENT', status);

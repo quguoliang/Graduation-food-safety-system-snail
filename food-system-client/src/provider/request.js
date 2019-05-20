@@ -12,10 +12,7 @@ const request = axios.create({
 			return data;
 		},
 	],
-	// headers: {
-	// 	'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-	// },
-	//
+	// 	headers: { 'content-type': 'application/x-www-form-urlencoded' },
 });
 
 // 添加请求拦截器

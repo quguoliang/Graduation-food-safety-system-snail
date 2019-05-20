@@ -15,7 +15,8 @@ function addStyleResource(rule) {
 module.exports = {
 	outputDir: 'dist',
 	lintOnSave: false,
-	publicPath: '/',
+	publicPath: './',
+
 	chainWebpack: config => {
 		config.resolve.alias
 			.set('@', resolve('src'))
@@ -41,22 +42,13 @@ module.exports = {
 		const imagesRule = config.module.rule('images');
 		imagesRule.exclude.add(resolve('src/icons'));
 		config.module.rule('images').test(/\.(png|jpe?g|gif|svg)(\?.*)?$/);
-
-		// 这里是对环境的配置，不同环境对应不同的BASE_API，以便axios的请求地址不同
-		// config.plugin('define').tap(args => {
-		// 	const argv = process.argv;
-		// 	const mode = argv[argv.indexOf('--project-mode') + 1];
-		// 	args[0]['process.env'].MODE = `"${mode}"`;
-		// 	args[0]['process.env'].BASE_API = '""';
-		// 	return args;
-		// });
 	},
 
 	devServer: {
 		port: 13068,
 		proxy: {
 			'/api': {
-				target: 'http://127.0.0.1:2345/api',
+				target: 'http://47.107.150.235:2346/api',
 				changeOrigin: true,
 				pathRewrite: {
 					'^/api': '',

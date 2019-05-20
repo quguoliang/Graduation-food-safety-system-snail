@@ -1,126 +1,166 @@
-const request = require('request')
-const crypto = require('crypto')
-const db = require('../middleware/monk-mongo/index').db;
-const user = db.get('users');
+const request = require("request");
+const crypto = require("crypto");
+const db = require("../middleware/monk-mongo/index").db;
+const user = db.get("users");
+var http = require("http");
+var querystring = require("querystring");
 //登录
-let login = function (telphone, password) {
+let login = function(telphone, password) {
     const findUser = user.findOne({
         telphone: telphone,
         password: password
-    })
-    return findUser
-
-}
+    });
+    return findUser;
+};
 
 //验证码
-let validateCode = function (telphone) {
-    // 从控制台获取
-    let accesskey = '5ca4735787b65f6374f1a0a2'
-    let secretkey = 'a8036e49885f478bb6edcdf999f9a19b'
-    // 生成随机验证码(字符串)
-    let random = ''
+let validateCode = function(telphone) {
+    console.log("====================================");
+    console.log(telphone);
+    console.log("====================================");
+    var md5 = crypto.createHash("md5");
+    let random = "";
     for (let i = 0; i < 6; i++) {
-        random += parseInt(Math.random() * 10)
+        random += parseInt(Math.random() * 10);
     }
-    // // // unix时间戳
-    // let curTime = Math.floor(Date.now() / 1000)
-    // // 需安装引入crypto模块
-    // let hash = crypto.createHash('sha256')
-    // hash.update(`secretkey=${secretkey}&random=${random}&time=${curTime}&mobile=${telphone}`)
-    // // 手机号非空及格式校验
-    // var uphoneRegRule = /^1\d{10}$/;
+    var smsapi = "api.smsbao.com";
+    // 短信平台账号
+    var user = "qubaba";
+    // 短信平台密码
+    var password = "admin";
+    // 要发送的短信内容
+    var content = `【桔子科技】:您的验证码为${random}，5分钟内有效，请勿泄漏给他人！`;
+    // 要发送短信的手机号码
+    var phone = "18531452110";
 
-    // if (telphone && uphoneRegRule.test(telphone)) {
-    //     // 请求包体,必须使用双引号
-    //     let data = {
-    //         "tel": {
-    //             "nationcode": "86", // 国家码
-    //             "mobile": telphone // 手机号码
-    //         },
-    //         "signId": "5ca472f787b65f6374f1a089", // 短信签名ID
-    //         "templateId": "5a9599b66fcafe461546ba55", // 短信模板ID
-    //         "params": [random], // 参数，分别对应上面假定模板的{1}，{2}
-    //         "sig": hash.digest("hex").toUpperCase(), // 计算app凭证
-    //         "time": curTime, // unix时间戳
-    //         "extend": "", // 通道扩展码，可选字段
-    //         "ext": "", // 用户的session内容，可选字段
-    //         "type": 0, // 0:普通短信 1:营销短信
-    //     }
-    //     // 需安装引入request模块
-    //     request({
-    //         url: `https://live.kewail.com/sms/v2/sendsinglesms?accesskey=${accesskey}&random=${random}`,
-    //         method: 'POST',
-    //         json: data
-    //     }, (error, response, body) => {
-    //         if (!error && response.statusCode == 200 && body.result === 0) {
+    send_sms(smsapi, user, password, content, phone);
 
-    //         } else {
+    function send_sms(smsapi, user, password, content, phone) {
+        var pass = md5.update(password).digest("hex");
+        var data = {
+            u: user,
+            p: pass,
+            m: phone,
+            c: content
+        };
+        var content = querystring.stringify(data);
+        var sendmsg = ""; //创建空字符串，用来存放收到的数据
+        var options = {
+            hostname: smsapi,
+            path: "/sms?" + content,
+            method: "GET"
+        };
+        //创建请求
+        var req = http.request(options, function(res) {
+            res.setEncoding("utf-8");
+            res.on("data", function(result) {
+                statusStr(result);
+            });
+            res.on("end", function() {});
+        });
+        req.on("error", function(err) {
+            console.error(err);
+        });
+        req.end();
+    }
 
-    //         }
-    //     })
-    // } else {
+    function statusStr(result) {
+        switch (result) {
+            case "0":
+                console.log("短信发送成功");
+                break;
+            case "-1":
+                console.log("参数不全");
+                break;
+            case "-2":
+                console.log(
+                    "服务器空间不支持,请确认支持curl或者fsocket，联系您的空间商解决或者更换空间！"
+                );
+                break;
+            case "30":
+                console.log("密码错误");
+                break;
+            case "40":
+                console.log("账户不存在");
+                break;
+            case "41":
+                console.log("余额不足");
+                break;
+            case "42":
+                console.log("账户已过期");
+                break;
+            case "43":
+                console.log("IP地址限制");
+                break;
+            case "50":
+                console.log("内容含有敏感字");
+                break;
+        }
+    }
 
-    // } // 手机号格式验证失败
-    return random
-}
-
+    return random;
+};
+validateCode();
 //修改密码
-let modifyPassword = async function (username, newPassword) {
+let modifyPassword = async function(username, newPassword) {
     let userObj = await user.findOne({
         telphone: username
     });
     userObj.password = newPassword;
-    let obj = user.findOneAndUpdate({
-        telphone: username
-    }, userObj)
-    return obj
-}
+    let obj = user.findOneAndUpdate(
+        {
+            telphone: username
+        },
+        userObj
+    );
+    return obj;
+};
 
 //注册
-let register = async function (telphone, password, remark) {
+let register = async function(telphone, password, remark) {
     // let selectObj = await user.findOne({
     //     username: username,
     // })
-    let selectObj = await selectUser(telphone)
+    let selectObj = await selectUser(telphone);
 
     if (selectObj instanceof Object) {
-        return ''
+        return "";
     } else {
         let insertObj = user.insert({
-            "telphone": telphone,
-            "password": password,
-            "isSuperManager": '0',
-            "remark": remark,
-            "date": Date.parse(new Date()),
-            "avatar": "/uploads/primary.jpg",
-            "username": ''
-        })
-        return insertObj
+            telphone: telphone,
+            password: password,
+            isSuperManager: "0",
+            remark: remark,
+            date: Date.parse(new Date()),
+            avatar: "/uploads/primary.jpg",
+            username: ""
+        });
+        return insertObj;
     }
-}
+};
 //查询用户是否存在
-let selectUser = function (telphone) {
+let selectUser = function(telphone) {
     return user.findOne({
         telphone: telphone
-    })
-}
+    });
+};
 
 //查看当前所有用户
-let allUser = function () {
-    var userList = user.find({})
+let allUser = function() {
+    var userList = user.find({});
 
-    return userList
-}
+    return userList;
+};
 
 //删除用户
-let deleteUser = function (_id) {
+let deleteUser = function(_id) {
     return user.remove({
-        "_id": _id
+        _id: _id
     });
-}
+};
 
 //修改用户信息
-let modifyUserInfo = async function (_id, newUserInfo) {
+let modifyUserInfo = async function(_id, newUserInfo) {
     let userObj = await user.findOne({
         _id: _id
     });
@@ -128,15 +168,17 @@ let modifyUserInfo = async function (_id, newUserInfo) {
     userObj.isSuperManager = newUserInfo.isSuperManager;
     userObj.remark = newUserInfo.remark;
     userObj.avatar = newUserInfo.avatar;
-    if (newUserInfo.password !== '') {
-        userObj.password = newUserInfo.password
+    if (newUserInfo.password !== "") {
+        userObj.password = newUserInfo.password;
     }
-    let obj = user.findOneAndUpdate({
-        _id: _id
-    }, userObj)
-    return obj
-}
-
+    let obj = user.findOneAndUpdate(
+        {
+            _id: _id
+        },
+        userObj
+    );
+    return obj;
+};
 
 module.exports = {
     login: login,
@@ -147,4 +189,4 @@ module.exports = {
     allUser: allUser,
     deleteUser: deleteUser,
     modifyUserInfo: modifyUserInfo
-}
+};

@@ -1,51 +1,56 @@
 <template>
-	<div class="loginPage">
-		<img class="logoImg" src="../assets/images/logo-little.png" alt="" />
+  <div class="loginPage">
+    <img class="logoImg"
+         src="../assets/images/logo-little.png"
+         alt="" />
 
-		<div class="login">
-			<div class="loginContent">
-				<div class="title">
-					<span>用户登录</span>
-				</div>
-				<Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="0">
-					<FormItem>
-						<Input size="large" v-model="formValidate.telphone" placeholder="手机号"></Input>
-					</FormItem>
-					<FormItem>
-						<Input
-							size="large"
-							v-model="formValidate.password"
-							:type="changeType"
-							:icon="changeIcon"
-							@on-click="changeIconState"
-							placeholder="密码"
-						></Input>
-					</FormItem>
-					<FormItem>
-						<div class="send">
-							<Input
-								class="sendInput"
-								size="large"
-								v-model="formValidate.verificationCode"
-								placeholder="短信验证码"
-								style="width: 270px"
-							/>
-							<span class="sendCode" @click="sendMessage"
-								>{{ getMessageCode }}<span v-if="typeof this.getMessageCode === 'number'">s</span></span
-							>
-						</div>
-					</FormItem>
-					<FormItem>
-						<Button @click="login" size="large" type="info" long>登 录</Button>
-					</FormItem>
-				</Form>
-				<div class="bottom">
-					<span @click="missPassword">忘记密码？</span>
-					<span @click="register">立即注册>></span>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="login">
+      <div class="loginContent">
+        <div class="title">
+          <span>用户登录</span>
+        </div>
+        <Form ref="formValidate"
+              :model="formValidate"
+              :rules="ruleValidate"
+              :label-width="0">
+          <FormItem>
+            <Input size="large"
+                   v-model.trim="formValidate.telphone"
+                   placeholder="手机号"></Input>
+          </FormItem>
+          <FormItem>
+            <Input size="large"
+                   v-model="formValidate.password"
+                   :type="changeType"
+                   :icon="changeIcon"
+                   @on-click="changeIconState"
+                   placeholder="密码"></Input>
+          </FormItem>
+          <FormItem>
+            <div class="send">
+              <Input class="sendInput"
+                     size="large"
+                     v-model="formValidate.verificationCode"
+                     placeholder="短信验证码"
+                     style="width: 270px" />
+              <span class="sendCode"
+                    @click="sendMessage">{{ getMessageCode }}<span v-if="typeof this.getMessageCode === 'number'">s</span></span>
+            </div>
+          </FormItem>
+          <FormItem>
+            <Button @click="login"
+                    size="large"
+                    type="info"
+                    long>登 录</Button>
+          </FormItem>
+        </Form>
+        <div class="bottom">
+          <span @click="missPassword">忘记密码？</span>
+          <span @click="register">立即注册>></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';

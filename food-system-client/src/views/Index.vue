@@ -96,19 +96,38 @@ export default {
 			this.activeName = this.$route.path.slice(1);
 			this.$refs.activeName.updateActiveName();
 		});
+		console.log('Code is far away from bug with the animal protecting');
+		console.log(
+			[
+				' 　　　　　　　　┏┓　　　┏┓',
+				' 　　　　　　　┏┛┻━━━┛┻┓',
+				'　　　　　　　┃　　　　　　　┃',
+				' 　　　　　　　┃　　　━　　　┃',
+				' 　　　　　　　┃　＞　　　＜　┃',
+				' 　　　　　　　┃　　　　　　　┃',
+				' 　　　　　　　┃...　⌒　...　┃',
+				' 　　　　　　　┃　　　　　　　┃',
+				' 　　　　　　　┗━┓　　　┏━┛',
+				' 　　　　　　　　　┃　　　┃',
+				' 　　　　　　　　　┃　　　┃',
+				' 　　　　　　　　　┃　　　┃',
+				'　　　　　　　　　┃　　　┃',
+				' 　　　　　　　　　┃　　　┃',
+				' 　　　　　　　　　┃　　　┃',
+				' 　　　　　　　　　┃　　　┗━━━┓',
+				' 　　　　　　　　　┃　　　　　　　┣┓',
+				' 　　　　　　　　　┃　　　　　　　┏┛',
+				' 　　　　　　　　　┗┓┓┏━┳┓┏┛',
+				' 　　　　　　　　　　┃┫┫　┃┫┫',
+				' 　　　　　　　　　　┗┻┛　┗┻┛',
+			].join('\n')
+		);
+		console.log('神兽保佑,代码无bug');
 	},
 	updated() {
 		this.activeName = this.$route.path.slice(1);
 		this.$refs.activeName.updateActiveName();
 	},
-	// watch: {
-	// 	activeName(newVal) {
-	// 		if (newVal) {
-	// 			this.activeName = this.$route.path.slice(1);
-	// 			this.$refs.activeName.updateActiveName();
-	// 		}
-	// 	},
-	// },
 	methods: {
 		collapsedSider() {
 			this.$refs.side1.toggleCollapse();

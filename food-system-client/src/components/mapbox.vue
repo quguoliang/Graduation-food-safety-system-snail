@@ -22,7 +22,7 @@
 							multiple
 							type="drag"
 							action="/api/upload"
-							:on-progress="
+							:on-success="
 								(event, file) => {
 									imgUpload(event, file, index);
 								}
@@ -102,24 +102,11 @@ export default {
 			}
 
 			//修改地图信息为中文信息
-			// this.mapBox.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
 			let mapLanguage = new this.mapboxLanguage({
 				defaultLanguage: 'zh',
 			});
 
 			map.addControl(mapLanguage);
-
-			// var MapboxDirections = require('@mapbox/mapbox-gl-directions');
-			// //添加路径查询插件
-			// map.addControl(
-			// 	new MapboxDirections({
-			// 		accessToken: this.mapBox.accessToken,
-			// 		unit: 'metric',
-			// 		profile: 'mapbox/driving',
-			// 		controls: { inputs: false },
-			// 	})
-			// 	// 'bottom-left'
-			// );
 
 			//添加搜索地理位置控件
 			map.addControl(
@@ -156,41 +143,75 @@ export default {
 			map.on(
 				'click',
 				function(e) {
-					this.markerList.push([e.lngLat.lng, e.lngLat.lat]);
-					this.lineInfo.push({ lng: e.lngLat.lng, lat: e.lngLat.lat, placename: '', placeinfo: '', img: '' });
-					new this.mapBox.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map);
+					let len = this.lineInfo.length - 1;
+					if (len === -1) {
+						this.markerList.push([e.lngLat.lng, e.lngLat.lat]);
+						this.lineInfo.push({ lng: e.lngLat.lng, lat: e.lngLat.lat, placename: '', placeinfo: '', img: '' });
+						new this.mapBox.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map);
 
-					map.addLayer({
-						id: 'route' + a,
-						type: 'line',
-						source: {
-							type: 'geojson',
-							data: {
-								type: 'Feature',
-								properties: {},
-								geometry: {
-									type: 'LineString',
-									coordinates: this.markerList,
+						map.addLayer({
+							id: 'route' + a,
+							type: 'line',
+							source: {
+								type: 'geojson',
+								data: {
+									type: 'Feature',
+									properties: {},
+									geometry: {
+										type: 'LineString',
+										coordinates: this.markerList,
+									},
 								},
 							},
-						},
-						layout: {
-							'line-join': 'round',
-							'line-cap': 'round',
-						},
-						paint: {
-							'line-color': '#888',
-							'line-width': 8,
-						},
-					});
-					a += 1;
+							layout: {
+								'line-join': 'round',
+								'line-cap': 'round',
+							},
+							paint: {
+								'line-color': '#888',
+								'line-width': 8,
+							},
+						});
+						a += 1;
+					} else {
+						if (this.lineInfo[len].placename !== '') {
+							this.markerList.push([e.lngLat.lng, e.lngLat.lat]);
+							this.lineInfo.push({ lng: e.lngLat.lng, lat: e.lngLat.lat, placename: '', placeinfo: '', img: '' });
+							new this.mapBox.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map);
+
+							map.addLayer({
+								id: 'route' + a,
+								type: 'line',
+								source: {
+									type: 'geojson',
+									data: {
+										type: 'Feature',
+										properties: {},
+										geometry: {
+											type: 'LineString',
+											coordinates: this.markerList,
+										},
+									},
+								},
+								layout: {
+									'line-join': 'round',
+									'line-cap': 'round',
+								},
+								paint: {
+									'line-color': '#888',
+									'line-width': 8,
+								},
+							});
+							a += 1;
+						} else {
+							this.$Message.error('请完善信息后继续添加节点信息！');
+						}
+					}
 				}.bind(this)
 			);
 		},
-		async imgUpload(event, file, index) {
-			setTimeout(() => {
-				this.lineInfo[index].img = file.response.filePath;
-			}, 100);
+		imgUpload(event, file, index) {
+			this.lineInfo[index].img = file.response.filePath;
 		},
 		addData() {
 			this.modal = true;

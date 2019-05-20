@@ -85,16 +85,11 @@ export default {
         {
           id: 4,
           type: "image",
-          url: "http://uploads.xuexila.com/allimg/1612/795-161216123011421.jpg"
-        },
-        {
-          id: 5,
-          type: "image",
           url:
             "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=194539312,3560030324&fm=200&gp=0.jpg"
         },
         {
-          id: 6,
+          id: 5,
           type: "image",
           url:
             "https://www.9ztj.com/file/upload/image/201503/27/20150327020342_98805.jpg"
